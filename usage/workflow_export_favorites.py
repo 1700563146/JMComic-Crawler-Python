@@ -1,26 +1,10 @@
 import os
 import sys
+from jmcomic import *
 
 print("=== 脚本开始执行 ===")
 print(f"当前目录: {os.getcwd()}")
 print(f"文件列表: {os.listdir('.')}")
-
-try:
-    print("尝试导入 jmcomic...")
-    from jmcomic import *
-    print("jmcomic 导入成功")
-except Exception as e:
-    print(f"导入失败: {e}")
-    sys.exit(1)
-
-try:
-    print("尝试导入 prepare_actions_input_and_secrets...")
-    from workflow_export_favorites import prepare_actions_input_and_secrets
-    print("导入成功")
-except Exception as e:
-    print(f"导入失败: {e}")
-    sys.exit(1)
-
 
 def prepare_actions_input_and_secrets():
     """
@@ -28,7 +12,7 @@ def prepare_actions_input_and_secrets():
     目的是为了支持：当没有配置环境变量时，可以找另一个环境变量来用
     """
 
-    def env(match: Match) -> str:
+    def env(match) -> str:
         name = match[1]
         value = os.getenv(name, '')
 
@@ -61,7 +45,11 @@ def main():
     
     # 打印当前目录，确认配置文件路径
     print(f"当前目录: {os.getcwd()}")
-    print(f"../assets/option/ 目录内容: {os.listdir('../assets/option/') if os.path.exists('../assets/option/') else '目录不存在'}")
+    assets_path = '../assets/option/'
+    if os.path.exists(assets_path):
+        print(f"{assets_path} 目录内容: {os.listdir(assets_path)}")
+    else:
+        print(f"{assets_path} 目录不存在")
     
     option = create_option('../assets/option/option_workflow_export_favorites.yml')
     print("配置文件读取成功")
